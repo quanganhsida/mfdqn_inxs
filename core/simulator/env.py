@@ -50,7 +50,7 @@ class Env:
             # convert to sinr
             sinr[n] = rx_power_w[n] / (int_power_w[n] + rx_np)
             # convert to MB/s
-            capacity[n] = Wk * np.log2(1 + sinr[n]) /8 /1e6
+            capacity[n] = Wk * np.log2(1 + sinr[n]) / 8 /1e6
         # reward
         reward = np.min(capacity)
         self.multi_agent_reward = capacity

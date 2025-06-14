@@ -1,12 +1,12 @@
-all: prepare plot
-
-install:
-	pip3 install -r requirements.txt
-	pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+all: install_cuda prepare train plot
 
 install_cuda:
 	pip3 install -r requirements.txt
 	pip3 install torch torchvision torchaudio
+
+install_cpu:
+	pip3 install -r requirements.txt
+	pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
 prepare:
 	python3 main.py --scenario=prepare_data
@@ -21,13 +21,13 @@ plot:
 	wait
 
 run:
-	python3 main.py --scenario=main --solver=greedy
-	python3 main.py --scenario=main --solver=maql
-	python3 main.py --scenario=main --solver=optimal
-	python3 main.py --scenario=main --solver=q_heuristic
-	python3 main.py --scenario=main --solver=random
 	python3 main.py --scenario=main --solver=mfdqn
 	python3 main.py --scenario=main --solver=idqn
+# 	python3 main.py --scenario=main --solver=greedy
+# 	python3 main.py --scenario=main --solver=maql
+# 	python3 main.py --scenario=main --solver=optimal
+# 	python3 main.py --scenario=main --solver=q_heuristic
+# 	python3 main.py --scenario=main --solver=random
 
 train:
 	python3 main.py --scenario=main --mode=train --solver=mfdqn

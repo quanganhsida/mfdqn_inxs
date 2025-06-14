@@ -21,7 +21,7 @@ def get_args():
     # simulation scenario
     parser.add_argument('--n_test_step', type=int, default=10000)
     parser.add_argument('--n_train_step', type=int, default=10000)
-    parser.add_argument('--n_step', type=int, default=1000)
+    parser.add_argument('--n_step', type=int, default=10000)
     # network scenario
     parser.add_argument('--n_subnetwork', type=int, default=20)
     parser.add_argument('--n_channel', type=int, default=4)
@@ -30,7 +30,7 @@ def get_args():
     parser.add_argument('--tx_power_max', type=float, default=-10) # dBm
     parser.add_argument('--rx_nf', type=float, default=5) # dB
     parser.add_argument('--bandwidth', type=float, default=40e6) # Hz
-    parser.add_argument('--n_snapshot', type=int, default=1000)
+    parser.add_argument('--n_snapshot', type=int, default=10000)
     parser.add_argument('--deploy_length', type=float, default=20)   # m
     parser.add_argument('--subnetwork_radius', type=float, default=1) # m
     # solver
