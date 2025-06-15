@@ -59,7 +59,7 @@ class Monitor:
     @property
     def label(self):
         args = self.args
-        label = f'{args.solver}'
+        label = f'{args.solver}_{args.n_subnetwork}_{args.deploy_length}'
         return label
 
     def __update_description(self, **kwargs):

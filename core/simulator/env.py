@@ -7,7 +7,7 @@ class Env:
         # save args
         self.args = args
         # load csi matrix
-        path = os.path.join(args.data_dir, 'csi.npy')
+        path = os.path.join(args.data_dir, f'csi_{args.n_subnetwork}_{args.deploy_length}.npy')
         self.csi = np.load(path)
         # self.csi[:, ...] = self.csi[0, ...]
         # initialize global step

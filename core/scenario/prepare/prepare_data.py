@@ -26,8 +26,8 @@ def prepare_data(args):
             self.no_dbm = -174
             self.noise_figure_db = 5
             self.noise_power = 10 ** ((self.no_dbm + self.noise_figure_db + 10 * np.log10(self.ch_bandwidth)) / 10)
-            self.mapXPoints = np.linspace(0, self.deploy_length, num=20 * self.deploy_length, endpoint=True)
-            self.mapYPoints = np.linspace(0, self.deploy_length, num=20 * self.deploy_length, endpoint=True)
+            self.mapXPoints = np.linspace(0, self.deploy_length, num=int(20 * self.deploy_length), endpoint=True)
+            self.mapYPoints = np.linspace(0, self.deploy_length, num=int(20 * self.deploy_length), endpoint=True)
             self.correlationDistance = 5
 
     snapshots = args.n_snapshot
