@@ -1,4 +1,5 @@
 import numpy as np
+import time
 import simulator
 
 def get_observation(self):
@@ -84,6 +85,7 @@ class Solver:
         step = 0
         # iteratively run until done
         for step in range(args.n_test_step):
+            tic = time.time()
             # select random action
             action = self.select_action(observation)
             # send to env
@@ -97,6 +99,8 @@ class Solver:
                 observation = next_observation
             step += 1
             # logging to cache
+            toc = time.time()
+            info['time'] = toc - tic
             monitor.step(info)
         # export cache to csv
         monitor.export_csv()
