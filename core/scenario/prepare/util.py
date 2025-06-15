@@ -82,7 +82,7 @@ def compute_shadowing(deploy_param, dist, gwLoc):
     Ilocx,idx = ismember(np.round(gwLoc[0, :], decimals=1), np.round(deploy_param.mapXPoints, decimals=1))
     Ilocy,idy = ismember(np.round(gwLoc[1, :], decimals=1), np.round(deploy_param.mapYPoints, decimals=1))
     mapp = createMap(deploy_param)
-    print(f'{idx.shape=} {idy.shape=} {mapp.shape=}')
+    # print(f'{idx.shape=} {idy.shape=} {mapp.shape=}')
     # bug gen data was here, shape not align
     idxx = np.ravel_multi_index([idx, idy], (mapp.shape[0], mapp.shape[0]))
     mapp1 = mapp.flatten()

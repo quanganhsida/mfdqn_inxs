@@ -31,7 +31,7 @@ def get_args():
     parser.add_argument('--rx_nf', type=float, default=5) # dB
     parser.add_argument('--bandwidth', type=float, default=40e6) # Hz
     parser.add_argument('--n_snapshot', type=int, default=10000)
-    parser.add_argument('--deploy_length', type=float, default=20)   # m
+    parser.add_argument('--deploy_length', type=float, default=20.0)   # m
     parser.add_argument('--subnetwork_radius', type=float, default=1) # m
     # solver
     parser.add_argument('--solver', type=str, default='random')

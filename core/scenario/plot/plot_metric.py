@@ -14,14 +14,16 @@ def smooth_line(x, y, args):
 def plot_metric(args):
     # define solvers
     if args.mode == 'train':
-        solvers = ['idqn', 'mfdqn']
+        # solvers = ['mfdqn']
+        solvers = ['idqn', 'mfdqn', 'vdn']
     elif args.mode == 'test':
-        solvers = ['random', 'greedy', 'optimal', 'q_heuristic', 'maql', 'idqn', 'mfdqn']
+        # solvers = ['random', 'greedy', 'optimal', 'q_heuristic', 'maql', 'idqn', 'mfdqn']
+        solvers = ['random', 'greedy', 'q_heuristic', 'maql', 'idqn', 'mfdqn', 'vdn']
     else:
         raise NotImplementedError
     # load csv
     for solver in solvers:
-        path = os.path.join(args.csv_dir, args.mode, f'{solver}.csv')
+        path = os.path.join(args.csv_dir, args.mode, f'{solver}_{args.n_subnetwork}_{args.deploy_length}.csv')
         df = pd.read_csv(path)
         x = df['step'].to_numpy()
         y = df[args.metric].to_numpy()
@@ -32,5 +34,5 @@ def plot_metric(args):
     plt.ylabel(f'{args.metric}')
     plt.legend()
     plt.tight_layout()
-    path = os.path.join(args.figure_dir, f'{args.scenario}_{args.mode}_{args.metric}.pdf')
+    path = os.path.join(args.figure_dir, f'{args.scenario}_{args.n_subnetwork}_{args.deploy_length}_{args.mode}_{args.metric}.pdf')
     plt.savefig(path)
