@@ -15,10 +15,10 @@ def plot_boxplot(args):
     # define solvers
     if args.mode == 'train':
         # solvers = ['mfdqn']
-        solvers = ['idqn', 'mfdqn', 'vdn']
+        solvers = ['idqn', 'MFDQN', 'vdn']
     elif args.mode == 'test':
         # solvers = ['random', 'greedy', 'optimal', 'q_heuristic', 'maql', 'idqn', 'mfdqn']
-        solvers = ['random', 'greedy', 'q_heuristic', 'maql', 'idqn', 'mfdqn', 'vdn']
+        solvers = ['random', 'greedy', 'q_heuristic', 'maql', 'idqn', 'MFDQN', 'vdn']
     else:
         raise NotImplementedError
     # load csv

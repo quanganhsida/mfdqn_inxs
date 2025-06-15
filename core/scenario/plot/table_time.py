@@ -5,7 +5,7 @@ import os
 
 def table_time(args):
     # define solvers
-    solvers = ['random', 'greedy', 'q_heuristic', 'maql', 'idqn', 'mfdqn', 'vdn']
+    solvers = ['random', 'greedy', 'q_heuristic', 'maql', 'idqn', 'MFDQN', 'vdn']
     args.mode = 'test'
     # load csv
     for solver in solvers:
