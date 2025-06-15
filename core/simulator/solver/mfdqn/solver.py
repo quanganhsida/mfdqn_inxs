@@ -1,3 +1,4 @@
+import itertools as it
 import numpy as np
 import pickle
 import torch
@@ -62,14 +63,29 @@ def get_mf_action(self):
     if self.action is None:
         mf_action = np.full([args.n_subnetwork, args.n_channel * args.n_power_level], 1 / (args.n_channel * args.n_power_level))
         return mf_action
-    # extract action
+    # extract data
     action      = self.action
     channel     = action[:, 0]
     power_level = action[:, 1]
+    csi         = self.csi
+    t = self.global_step
+    T = len(csi)
+    # compute peer2peer interference between subnetworks
+    rx_power_w = np.zeros([args.n_subnetwork, args.n_subnetwork])
+    tx_power = action[:, 1]
+    level2dbm = np.linspace(args.tx_power_min, args.tx_power_max, args.n_power_level)
+    tx_power_dbm = level2dbm[tx_power]
+    tx_power_w = self.dbm2w(tx_power_dbm) # transmit
+    for n, i in it.product(range(args.n_subnetwork), range(args.n_subnetwork)):
+        # tx is subnetwork i, rx is subnetwork n
+        rx_power_w[n, i] = tx_power_w[n] * csi[t % T, channel[n], i, n]
+    # print(rx_power_w.min(), rx_power_w.max())
+    # print(rx_power_w.mean(), rx_power_w.std())
     # compute mean field action
     mf_action = np.zeros([args.n_subnetwork, args.n_channel, args.n_power_level])
     for n in range(args.n_subnetwork):
-        mf_action[:, channel[n], power_level[n]] += 1
+        neighbors = np.where(rx_power_w > args.neighbor_rx_power_threshold)[0]
+        mf_action[neighbors, channel[n], power_level[n]] += 1
         mf_action[n, channel[n], power_level[n]] -= 1
     # mf_action /= (args.n_subnetwork - 1)
     mf_action = mf_action.reshape(args.n_subnetwork, -1) / 9

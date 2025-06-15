@@ -56,6 +56,8 @@ def get_args():
     parser.add_argument('--dqn_tau', type=float, default=0.001)
     parser.add_argument('--dqn_boltzman_tau_start', type=float, default=200)
     parser.add_argument('--dqn_boltzman_tau_end', type=float, default=0.01)
+    # mfdqn solver
+    parser.add_argument('--neighbor_rx_power_threshold', type=float, default=1e-10)
     # data directory
     parser.add_argument('--figure_dir', type=str, default='../data/figure')
     parser.add_argument('--model_dir', type=str, default='../data/model')
