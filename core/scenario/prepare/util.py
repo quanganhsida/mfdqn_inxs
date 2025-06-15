@@ -16,10 +16,17 @@ def create_layout(deploy_param):
     while nValid < deploy_param.num_of_subnetworks and loop_terminate < 1e6:
         newX = bound*(deploy_param.rng_value.uniform()-0.5)
         newY = bound*(deploy_param.rng_value.uniform()-0.5)
-        if all(np.greater(((X[0:nValid] - newX)**2 + (Y[0:nValid] - newY)**2),dist_2)):
+        # Begin: Quanganh 's remove geometric constrain for denser networks
+        if deploy_param.deploy_length > deploy_param.num_of_subnetworks:
+            if all(np.greater(((X[0:nValid] - newX)**2 + (Y[0:nValid] - newY)**2),dist_2)):
+                X[nValid] = newX
+                Y[nValid] = newY
+                nValid = nValid+1
+        else: # dense than possible, remove geometric constraint
             X[nValid] = newX
             Y[nValid] = newY
             nValid = nValid+1
+        # End
         loop_terminate = loop_terminate+1
     if nValid < deploy_param.num_of_subnetworks:
         print("Invalid number of subnetworks for deploy size")
@@ -56,7 +63,7 @@ def createMap(self):
     self.mapp = mapp
     return mapp
 
-def channel_pathLoss(deploy_param, dist):
+def channel_pathloss(deploy_param, dist):
     PrLoS = np.exp(dist * np.log(1 - deploy_param.clutDens) / deploy_param.clutSize)
     NLoS = PrLoS <= (1 - PrLoS)
     Gamma = 31.84 + 21.5 * np.log10(dist) + 19 * np.log10(deploy_param.fc/1e9) #[idx]
@@ -71,10 +78,11 @@ def channel_pathLoss(deploy_param, dist):
                             axis=0)
     return 10**(-Gamma/10)
 
-def computeShadowing(deploy_param, dist, gwLoc):
+def compute_shadowing(deploy_param, dist, gwLoc):
     Ilocx,idx = ismember(np.round(gwLoc[0, :], decimals=1), np.round(deploy_param.mapXPoints, decimals=1))
     Ilocy,idy = ismember(np.round(gwLoc[1, :], decimals=1), np.round(deploy_param.mapYPoints, decimals=1))
     mapp = createMap(deploy_param)
+    print(f'{idx.shape=} {idy.shape=} {mapp.shape=}')
     idxx = np.ravel_multi_index([idx, idy], (mapp.shape[0], mapp.shape[0]))
     mapp1 = mapp.flatten()
     f = mapp1[idxx]
@@ -88,9 +96,9 @@ def computeShadowing(deploy_param, dist, gwLoc):
 def compute_power(deploy_param, dist, Loc, K):
     N = deploy_param.num_of_subnetworks
     power = np.zeros((K, N, N))
-    S, mapp = computeShadowing(deploy_param, dist, Loc.T)
+    S, mapp = compute_shadowing(deploy_param, dist, Loc.T)
     S_linear = 10**(-S/10)
-    PL = channel_pathLoss(deploy_param, dist)
+    PL = channel_pathloss(deploy_param, dist)
     for k in range(K):
         h = (1 / np.sqrt(2)) * (deploy_param.rng_value.randn(N, N) + 1j * deploy_param.rng_value.randn(N, N))
         power[k, :, :] = PL * S_linear * np.power(np.abs(h), 2)
@@ -104,7 +112,9 @@ def generate_samples(deploy_param, number_of_snapshots):
     dLoc = np.zeros([number_of_snapshots, N, 2])
     dLoc2 = np.zeros([number_of_snapshots, N, 2])
 
-    dist, gwLoc, dvLoc = create_layout(deploy_param) # <- dung sensor static
+    dist, gwLoc, dvLoc = create_layout(deploy_param)
+    # <- dung sensor static
+    # TODO: future works, mobility
     for i in tqdm(range(number_of_snapshots)):
         Channel_gain[i, :, :, :], PL[i, :, :] = compute_power(deploy_param, dist, gwLoc, K)
         dLoc[i, :, :] = gwLoc

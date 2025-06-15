@@ -26,20 +26,21 @@ def prepare_data(args):
             self.no_dbm = -174
             self.noise_figure_db = 5
             self.noise_power = 10 ** ((self.no_dbm + self.noise_figure_db + 10 * np.log10(self.ch_bandwidth)) / 10)
-            self.mapXPoints = np.linspace(0, self.deploy_length, num=401, endpoint=True)
-            self.mapYPoints = np.linspace(0, self.deploy_length, num=401, endpoint=True)
+            self.mapXPoints = np.linspace(0, self.deploy_length, num=20 * self.deploy_length, endpoint=True)
+            self.mapYPoints = np.linspace(0, self.deploy_length, num=20 * self.deploy_length, endpoint=True)
             self.correlationDistance = 5
 
     snapshots = args.n_snapshot
     config = init_parameters(args.seed)
 
     print(f'[+] generating ap {args.n_subnetwork=} {args.n_channel=} {args.n_snapshot=}')
+    label = f'{args.n_subnetwork}_{args.deploy_length}'
     csi, ap_location, client_location = util.generate_samples(config, snapshots)
-    path = os.path.join(args.data_dir, 'csi.npy')
+    path = os.path.join(args.data_dir, f'csi_{label}.npy')
     np.save(path, csi)
-    path = os.path.join(args.data_dir, 'ap_location.npy')
+    path = os.path.join(args.data_dir, f'ap_location_{label}.npy')
     np.save(path, ap_location)
-    path = os.path.join(args.data_dir, 'client_location.npy')
+    path = os.path.join(args.data_dir, f'client_location_{label}.npy')
     np.save(path, client_location)
 #     angle = np.random.uniform(0, 2 * np.pi, args.n_snapshot * args.n_subnetwork)
 #     radius = np.random.uniform(0.8, 1, args.n_snapshot * args.n_subnetwork)

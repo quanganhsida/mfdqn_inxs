@@ -11,6 +11,13 @@ install_cpu:
 prepare:
 	python3 main.py --scenario=prepare_data
 
+prepare_density:
+	python3 main.py --scenario=prepare_data --n_snapshot=1000 --n_subnetwork=20 --deploy_length=10
+	python3 main.py --scenario=prepare_data --n_snapshot=1000 --n_subnetwork=20 --deploy_length=20
+	python3 main.py --scenario=prepare_data --n_snapshot=1000 --n_subnetwork=20 --deploy_length=50
+	python3 main.py --scenario=prepare_data --n_snapshot=1000 --n_subnetwork=20 --deploy_length=100
+	python3 main.py --scenario=prepare_data --n_snapshot=1000 --n_subnetwork=20 --deploy_length=200
+
 plot:
 	python3 main.py --scenario=plot_metric --n_smooth=500 --metric=reward & \
 	python3 main.py --scenario=plot_metric --n_smooth=500 --metric=mean_capacity & \
