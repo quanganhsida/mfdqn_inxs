@@ -40,7 +40,7 @@ class Env:
         rx_power_w = np.zeros_like(tx_power_w) # receive
         int_power_w = np.zeros_like(tx_power_w) # interference
         sinr = np.zeros_like(tx_power_w) # sinr
-        capacity = np.zeros_like(tx_power_w) # sinr
+        capacity = np.zeros_like(tx_power_w) # capacity
         for n in range(args.n_subnetwork):
             # receive power at connected subnetwork
             rx_power_w[n] = tx_power_w[n] * csi[t % T, channel[n], n, n]
